@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentInsetStart="72dp"
+                app:contentInsetStart="8dp"
                 app:layout_collapseMode="pin">
 
                 <ImageView
@@ -48,7 +48,6 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingLeft="@dimen/list_side_margin"
-            android:paddingTop="116dp"
             android:paddingRight="@dimen/list_side_margin"
             android:paddingBottom="28dp"
             android:scrollbarStyle="outsideOverlay" />
