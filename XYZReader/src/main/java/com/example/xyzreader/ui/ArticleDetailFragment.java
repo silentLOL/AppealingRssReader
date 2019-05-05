@@ -1,19 +1,20 @@
 package com.example.xyzreader.ui;
 
 import android.content.Intent;
-
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
@@ -27,12 +28,16 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
+import com.example.xyzreader.adapter.ArticleBodyRecyclerViewAdapter;
 import com.example.xyzreader.data.ArticleLoader;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A fragment representing a single Article detail screen. This fragment is
@@ -53,6 +58,11 @@ public class ArticleDetailFragment extends Fragment implements
     private ObservableScrollView mScrollView;
     private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private ColorDrawable mStatusBarColorDrawable;
+
+    //RecyclerView to chop text
+    private RecyclerView mRecyclerViewArticleBodyPortions;
+    private LinearLayoutManager mLayoutManager;
+    private ArticleBodyRecyclerViewAdapter mAdapter;
 
     private int mTopInset;
     private View mPhotoContainerView;
@@ -152,7 +162,19 @@ public class ArticleDetailFragment extends Fragment implements
 
         bindViews();
         updateStatusBar();
+
+        setUpArticleBodyPortionsRecyclerView();
         return mRootView;
+    }
+
+    private void setUpArticleBodyPortionsRecyclerView() {
+        Log.d(TAG, "setUpArticleBodyPortionsRecyclerView");
+        mRecyclerViewArticleBodyPortions = mRootView.findViewById(R.id.article_body_rv);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerViewArticleBodyPortions.setLayoutManager(mLayoutManager);
+        mRecyclerViewArticleBodyPortions.setHasFixedSize(true);
+        mAdapter = new ArticleBodyRecyclerViewAdapter();
+        mRecyclerViewArticleBodyPortions.setAdapter(mAdapter);
     }
 
     private void updateStatusBar() {
@@ -200,13 +222,13 @@ public class ArticleDetailFragment extends Fragment implements
             return;
         }
 
-        TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
-        TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
+        TextView titleView = mRootView.findViewById(R.id.article_title);
+        TextView bylineView = mRootView.findViewById(R.id.article_byline);
         bylineView.setMovementMethod(new LinkMovementMethod());
-        TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
+        TextView articleBodyListItemTv = mRootView.findViewById(R.id.article_body_portion_tv);
 
-
-        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+        // TODO: this a sans-serif font. Find a replacement which fits to Roboto
+        //articleBodyListItemTv.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
@@ -232,7 +254,13 @@ public class ArticleDetailFragment extends Fragment implements
                                 + "</font>"));
 
             }
-            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            //bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            // this is where we populate our body recycler view
+            String fullBody = mCursor.getString(ArticleLoader.Query.BODY);
+            String[] portions = splitFullBodyToList(fullBody);
+            mAdapter.setArticleBodyPortions(portions);
+
+
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
@@ -257,7 +285,24 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
             bylineView.setText("N/A");
-            bodyView.setText("N/A");
+            //bodyView.setText("N/A");
+        }
+    }
+
+    /**
+     * Splits the full body string into an array at any new line character.
+     *
+     * @param fullBody
+     * @returns an array of strings.
+     */
+    public String[] splitFullBodyToList(String fullBody) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            List<String> arrayList = Stream.of(fullBody.split("\n"))
+                    .map(elem -> new String(elem))
+                    .collect(Collectors.toList());
+            return arrayList.toArray(new String[arrayList.size()]);
+        } else {
+            return fullBody.split("\n");
         }
     }
 

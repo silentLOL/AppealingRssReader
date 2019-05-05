@@ -73,6 +73,16 @@
                         android:textColor="#8fff" />
                 </LinearLayout>
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/article_body_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="7"
+                    android:adjustViewBounds="true"
+                    android:horizontalSpacing="8dp"
+                    android:padding="16dp" />
+
+                <!-- TextView replaced by recycler view
                 <TextView
                     android:id="@+id/article_body"
                     style="?android:attr/textAppearanceMedium"
@@ -85,6 +95,7 @@
                     android:textColor="@color/textDarkGrey"
                     android:textColorLink="?colorAccent"
                     android:textSize="@dimen/detail_body_text_size" />
+                -->
 
             </com.example.xyzreader.ui.MaxWidthLinearLayout>
         </FrameLayout>
