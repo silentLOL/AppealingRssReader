@@ -219,7 +219,7 @@ public class ArticleDetailFragment extends Fragment implements
 
         TextView bylineView = mRootView.findViewById(R.id.article_byline);
         bylineView.setMovementMethod(new LinkMovementMethod());
-        TextView articleBodyListItemTv = mRootView.findViewById(R.id.article_body_portion_tv);
+        mRootView.findViewById(R.id.article_body_portion_tv);
 
         // TODO: this a sans-serif font. Find a replacement which fits to Roboto
         //articleBodyListItemTv.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
@@ -228,7 +228,8 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
-            ((CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar_layout)).setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
+            //((CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar_layout)).setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
+            ((TextView) mRootView.findViewById(R.id.article_title)).setText(mCursor.getString(ArticleLoader.Query.TITLE));
             Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
                 bylineView.setText(Html.fromHtml(
@@ -264,9 +265,8 @@ public class ArticleDetailFragment extends Fragment implements
                                 Palette p = Palette.generate(bitmap, 12);
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
-                                mRootView.findViewById(R.id.app_bar_layout)
-                                        .setBackgroundColor(mMutedColor);
-                                updateStatusBar();
+                                ((CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar_layout)).setContentScrimColor(mMutedColor);
+                                //updateStatusBar();
                             }
                         }
 
