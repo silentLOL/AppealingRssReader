@@ -22,7 +22,7 @@
 
     <color name="colorPrimary">#555</color>
     <color name="colorPrimaryDark">#333</color>
-    <color name="colorAccent">#00bcd4</color>
+    <color name="colorAccent">#FD4B1E</color>
     <color name="articleTextColor">#fff</color>
     <color name="articleByLineTextColor">#8fff</color>
 </resources>
