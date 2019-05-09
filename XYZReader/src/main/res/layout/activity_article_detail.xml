@@ -8,13 +8,14 @@
         android:layout_height="match_parent" />
 
     <FrameLayout
-        android:id="@+id/up_container"
+        android:id="@+id/up_bt_container"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
+        android:layout_marginTop="16dp"
         android:background="@android:color/transparent">
 
         <ImageButton
-            android:id="@+id/action_up"
+            android:id="@+id/action_up_bt"
             android:layout_width="56dp"
             android:layout_height="?actionBarSize"
             android:background="?selectableItemBackgroundBorderless"

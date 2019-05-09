@@ -39,4 +39,9 @@
         <item name="android:textColor">@color/articleByLineTextColor</item>
     </style>
 
+    <style name="ArticleBodyText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/textDarkGrey</item>
+        <item name="android:fontFamily">serif</item>
+    </style>
+
 </resources>
