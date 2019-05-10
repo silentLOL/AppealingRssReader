@@ -9,12 +9,14 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appbar_height"
-        android:background="?colorPrimary">
+        android:background="?colorPrimary"
+        android:stateListAnimator="@animator/appbar_elevation">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             app:collapsedTitleTextAppearance="@style/ArticleTitleText"
             app:contentScrim="?attr/colorAccent"
             app:expandedTitleMarginStart="@dimen/detail_inner_horiz_margin"

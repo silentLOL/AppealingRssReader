@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.animation.AnimatorInflater;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -15,6 +17,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
@@ -63,6 +66,10 @@ public class ArticleDetailFragment extends Fragment implements
     private RecyclerView mRecyclerViewArticleBodyPortions;
     private LinearLayoutManager mLayoutManager;
     private ArticleBodyRecyclerViewAdapter mAdapter;
+
+    private AppBarLayout appBarLayout;
+    private Toolbar appBar;
+    private CollapsingToolbarLayout toolbarLayout;
 
     private int mTopInset;
     private View mPhotoContainerView;
@@ -114,6 +121,7 @@ public class ArticleDetailFragment extends Fragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         // In support library r8, calling initLoader for a fragment in a FragmentPagerAdapter in
         // the fragment's onCreate may cause the same LoaderManager to be dealt to multiple
         // fragments because their mIndex is -1 (haven't been added to the activity yet). Thus,
@@ -133,6 +141,12 @@ public class ArticleDetailFragment extends Fragment implements
                 .setType("text/plain")
                 .setText("Some sample text")
                 .getIntent(), getString(R.string.action_share))));
+
+        appBarLayout = mRootView.findViewById(R.id.app_bar_layout);
+        appBar = mRootView.findViewById(R.id.app_bar);
+        //toolbarLayout = mRootView.findViewById(R.id.collapsing_toolbar_layout);
+        //ViewCompat.setElevation(toolbarLayout, getResources().getDimension(R.dimen.fab_elevation));
+        //appBarLayout.setStateListAnimator(AnimatorInflater.loadStateListAnimator(getContext(), R.animator.appbar_elevation));
 
         bindViews();
         updateStatusBar();
@@ -163,7 +177,6 @@ public class ArticleDetailFragment extends Fragment implements
                     (int) (Color.blue(mMutedColor) * 0.9));
         }
         mStatusBarColorDrawable.setColor(color);
-        //mDrawInsetsFrameLayout.setInsetBackground(mStatusBarColorDrawable);
     }
 
     static float progress(float v, float min, float max) {
