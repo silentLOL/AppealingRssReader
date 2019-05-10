@@ -9,5 +9,6 @@
 
     <string name="up">Up</string>
     <string name="exampleTitle">This could be a Title</string>
+    <string name="transition_photo">transitionPhoto</string>
 
 </resources>
